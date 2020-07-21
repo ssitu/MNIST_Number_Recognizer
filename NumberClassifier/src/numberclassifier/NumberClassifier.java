@@ -39,7 +39,7 @@ public class NumberClassifier extends Application {
         stage.sizeToScene();
         stage.show();
         initUpdater();
-        nn.load();
+        nn.loadInsideJar();
     }
 
     public StackPane createCanvas() {

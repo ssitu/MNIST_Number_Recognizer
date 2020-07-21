@@ -1,9 +1,9 @@
 /NumberClassifier/nbproject/private/
 /NumberClassifier/build/
-/NumberClassifier/src/modeltraining/trainingimages
-/NumberClassifier/src/modeltraining/traininglabels
-/NumberClassifier/src/modeltraining/testingimages
-/NumberClassifier/src/modeltraining/testinglabels
+/NumberClassifier/src/modeltraining/trainingimages.ser
+/NumberClassifier/src/modeltraining/traininglabels.ser
+/NumberClassifier/src/modeltraining/testingimages.ser
+/NumberClassifier/src/modeltraining/testinglabels.ser
 /NumberClassifier/src/modeltraining/train-images.idx3-ubyte
 /NumberClassifier/src/modeltraining/train-labels.idx1-ubyte
 /NumberClassifier/src/modeltraining/t10k-images.idx3-ubyte

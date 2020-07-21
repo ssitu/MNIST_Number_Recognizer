@@ -15,10 +15,10 @@ public class MNIST {
     private static final String TRAIN_LABELS_PATH = CD + "train-labels.idx1-ubyte";
     private static final String TEST_IMAGES_PATH = CD + "t10k-images.idx3-ubyte";
     private static final String TEST_LABELS_PATH = CD + "t10k-labels.idx1-ubyte";
-    private static final String TRAIN_IMAGES_SER = CD + "trainingimages";
-    private static final String TRAIN_LABELS_SER = CD + "traininglabels";
-    private static final String TEST_IMAGES_SER = CD + "testingimages";
-    private static final String TEST_LABELS_SER = CD + "testinglabels";
+    private static final String TRAIN_IMAGES_SER = CD + "trainingimages.ser";
+    private static final String TRAIN_LABELS_SER = CD + "traininglabels.ser";
+    private static final String TEST_IMAGES_SER = CD + "testingimages.ser";
+    private static final String TEST_LABELS_SER = CD + "testinglabels.ser";
     public float[][][] trainingimages = new float[60000][28][28];
     public float[][][] traininglabels = new float[60000][1][10];
     public float[][][] testingimages = new float[10000][28][28];
