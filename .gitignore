@@ -4,3 +4,7 @@
 /NumberClassifier/src/modeltraining/traininglabels
 /NumberClassifier/src/modeltraining/testingimages
 /NumberClassifier/src/modeltraining/testinglabels
+/NumberClassifier/src/modeltraining/train-images.idx3-ubyte
+/NumberClassifier/src/modeltraining/train-labels.idx1-ubyte
+/NumberClassifier/src/modeltraining/t10k-images.idx3-ubyte
+/NumberClassifier/src/modeltraining/t10k-labels.idx1-ubyte
