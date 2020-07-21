@@ -1,5 +1,7 @@
 package numberclassifier;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.scene.Group;
@@ -11,14 +13,18 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import numberclassifier.NNlib.NN;
 
 public class NumberClassifier extends Application {
 
-    public final int CANVAS_SIZE = 812;
+    public final int CANVAS_SIZE = 952;
     public final int WINDOW_WIDTH = (int) (CANVAS_SIZE * 1.5);
     public static Group ROOT = new Group();
     private DrawingCanvas canvas;
-    private Text[] percents = new Text[9];
+    private final Text[] percents = new Text[10];
+    private NN nn = Model.cnn5;
+    private Timeline updater;
 
     public static void main(String[] args) {
         launch(args);
@@ -32,6 +38,8 @@ public class NumberClassifier extends Application {
         stage.setResizable(false);
         stage.sizeToScene();
         stage.show();
+        initUpdater();
+        nn.load();
     }
 
     public StackPane createCanvas() {
@@ -39,6 +47,17 @@ public class NumberClassifier extends Application {
         StackPane pane = new StackPane(canvas);
         pane.setStyle("-fx-background-color: #363636;");
         return pane;
+    }
+
+    public void initUpdater() {
+        updater = new Timeline(new KeyFrame(Duration.millis(32), (t) -> {
+            float[] prediction = ((float[][]) nn.feedforward(new float[][][]{canvas.getPixelArray()}))[0];
+            for (int i = 0; i < 10; i++) {
+                percents[i].setText(String.valueOf(toPercent(prediction[i])));
+            }
+        }));
+        updater.setCycleCount(-1);
+        updater.play();
     }
 
     public Group rightSide() {
@@ -66,11 +85,11 @@ public class NumberClassifier extends Application {
         button.setTranslateY(CANVAS_SIZE / 50);
         //Classifications
         VBox classifications = new VBox();
-        for (int i = 0; i < 9; i++) {
-            classifications.getChildren().add(classification(i + 1, i * CANVAS_SIZE / 32));
+        for (int i = 0; i < 10; i++) {
+            classifications.getChildren().add(classification(i, i * CANVAS_SIZE / 32));
         }
         classifications.setTranslateX(CANVAS_SIZE * 1.05);
-        classifications.setTranslateY(button.getTranslateY() + shape.getHeight() * 1.5);
+        classifications.setTranslateY(button.getTranslateY() + shape.getHeight() * 1.25);
         Group ui = new Group(button, classifications);
         return ui;
     }
@@ -85,11 +104,11 @@ public class NumberClassifier extends Application {
         percentSymbol.setStyle("-fx-font: " + fontsize + "px MSPGothic");
         HBox hbox = new HBox(numClass, classPercent, percentSymbol);
         hbox.setTranslateY(gap);
-        percents[num - 1] = classPercent;
+        percents[num] = classPercent;
         return hbox;
     }
 
-    public static double decimalToPercent(double decimal) {
-        return Math.round(decimal * 10000) / 100.0;
+    public static float toPercent(float decimal) {
+        return Math.round(decimal * 100);
     }
 }

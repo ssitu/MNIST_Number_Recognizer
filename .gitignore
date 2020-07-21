@@ -1,2 +1,6 @@
 /NumberClassifier/nbproject/private/
 /NumberClassifier/build/
+/NumberClassifier/src/modeltraining/trainingimages
+/NumberClassifier/src/modeltraining/traininglabels
+/NumberClassifier/src/modeltraining/testingimages
+/NumberClassifier/src/modeltraining/testinglabels

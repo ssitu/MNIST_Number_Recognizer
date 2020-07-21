@@ -43,7 +43,7 @@ public class DrawingCanvas extends Canvas {
         if (xScaled >= 0 && xScaled < RES && yScaled >= 0 && yScaled < RES && (lastPixel[0] != xScaled || lastPixel[1] != yScaled || pressed)) {
             lastPixel[0] = xScaled;
             lastPixel[1] = yScaled;
-            pixelArray[xScaled][yScaled] = 1;
+            pixelArray[yScaled][xScaled] = 1;
             for (int x = xScaled * PIXELSIZE; x < (xScaled + 1) * PIXELSIZE; x++) {
                 for (int y = yScaled * PIXELSIZE; y < (yScaled + 1) * PIXELSIZE; y++) {
                     pw.setColor(x, y, fill);
@@ -52,10 +52,10 @@ public class DrawingCanvas extends Canvas {
             for (int i = -1; i <= 1; i += 2) {
                 try {
                     int newX = xScaled + i;
-                    pixelArray[newX][yScaled] = addInRange(pixelArray[newX][yScaled], SURROUNDING_FACTOR, 0, 1);
+                    pixelArray[yScaled][newX] = addInRange(pixelArray[yScaled][newX], SURROUNDING_FACTOR, 0, 1);
                     for (int x = newX * PIXELSIZE; x < (newX + 1) * PIXELSIZE; x++) {
                         for (int y = yScaled * PIXELSIZE; y < (yScaled + 1) * PIXELSIZE; y++) {
-                            pw.setColor(x, y, Color.hsb(fill.getHue(), 0, 1, pixelArray[newX][yScaled]));
+                            pw.setColor(x, y, Color.hsb(fill.getHue(), 0, 1, pixelArray[yScaled][newX]));
                         }
                     }
                 } catch (Exception e) {
@@ -64,10 +64,10 @@ public class DrawingCanvas extends Canvas {
             for (int i = -1; i <= 1; i += 2) {
                 try {
                     int newY = yScaled + i;
-                    pixelArray[xScaled][newY] = addInRange(pixelArray[xScaled][newY], SURROUNDING_FACTOR, 0, 1);
+                    pixelArray[newY][xScaled] = addInRange(pixelArray[newY][xScaled], SURROUNDING_FACTOR, 0, 1);
                     for (int x = xScaled * PIXELSIZE; x < (xScaled + 1) * PIXELSIZE; x++) {
                         for (int y = newY * PIXELSIZE; y < (newY + 1) * PIXELSIZE; y++) {
-                            pw.setColor(x, y, Color.hsb(fill.getHue(), 0, 1, pixelArray[xScaled][newY]));
+                            pw.setColor(x, y, Color.hsb(fill.getHue(), 0, 1, pixelArray[newY][xScaled]));
                         }
                     }
                 } catch (Exception e) {
@@ -86,12 +86,16 @@ public class DrawingCanvas extends Canvas {
         return sum;
     }
 
-    void clearCanvas() {
+    public void clearCanvas() {
         for (int i = 0; i < RES; i++) {
             for (int j = 0; j < RES; j++) {
                 pixelArray[i][j] = 0;
             }
         }
         this.getGraphicsContext2D().clearRect(0, 0, SIZE, SIZE);
+    }
+
+    public float[][] getPixelArray() {
+        return pixelArray;
     }
 }
