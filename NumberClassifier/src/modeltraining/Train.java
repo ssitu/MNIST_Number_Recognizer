@@ -9,11 +9,11 @@ import numberclassifier.NNlib.NN;
 
 public class Train {
 
-    public static NN nn = Model.cnn6;
+    public static NN nn = Model.nn;
     public static MNIST mnist = new MNIST();
 
     public static void main(String[] args) throws IOException, FileNotFoundException, ClassNotFoundException {
-        nn.load();
+        nn.loadInsideJar();
         NNlib.showInfo(NNlib.infoGraph(false), nn);
         train(50);
         System.exit(0);
@@ -26,7 +26,7 @@ public class Train {
             for (int i = 0; i < 60000; i++) {
                 nn.backpropagation(new float[][][]{mnist.trainingimages[i]}, mnist.traininglabels[i]);
             }
-            nn.save();
+            nn.saveInsideJar();
             System.out.println("Epochs: " + epoch);
         }
         System.out.println("Training ended.");
