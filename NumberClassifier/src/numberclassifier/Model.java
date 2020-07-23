@@ -41,12 +41,17 @@ public class Model {
             new Flatten(5, 11, 11),//10-11-11 = 1210
             new Dense(605, 10, Activation.SOFTMAX, Initializer.XAVIER)
     );
-    
+
     public static final NN cnn5 = new NN("cnn5", 0, 0, LossFunction.QUADRATIC(.1), Optimizer.ADADELTA,//98.29%
             new Conv(5, 1, 5, 5, 1, 1, 1, Activation.TANH),//1-30-30 conv(s=1) 5-1-5-5 = 5-26-26
             new Conv(10, 5, 8, 8, 2, 0, 0, Activation.TANH),//5-26-26 conv(s=2) 10-5-8-8 = 10-10-10
             new Flatten(10, 10, 10),//10-10-10 = 1000
             new Dense(1000, 10, Activation.SOFTMAX, Initializer.XAVIER)
+    );
+    public static final NN cnn6 = new NN("cnn6", 0, .001f, LossFunction.CROSSENTROPY(.5), Optimizer.ADAM,
+            new Conv(10, 1, 6, 6, 1, 1, 1, Activation.TANH),//1-30-30 conv(s=1) 10-1-6-6 = 10-25-25
+            new Flatten(10, 25, 25), //10-25-25 = 6250
+            new Dense(6250, 10, Activation.SOFTMAX, Initializer.XAVIER)
     );
 
     static {
@@ -56,5 +61,6 @@ public class Model {
         System.out.println("cnn3 learnable Parameters: " + cnn3.getParameterCount());
         System.out.println("cnn4 learnable Parameters: " + cnn4.getParameterCount());
         System.out.println("cnn5 learnable Parameters: " + cnn5.getParameterCount());
+        System.out.println("cnn6 learnable Parameters: " + cnn6.getParameterCount());
     }
 }

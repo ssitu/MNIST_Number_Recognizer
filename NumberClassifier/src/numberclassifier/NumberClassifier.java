@@ -23,7 +23,7 @@ public class NumberClassifier extends Application {
     public static Group ROOT = new Group();
     private DrawingCanvas canvas;
     private final Text[] percents = new Text[10];
-    private NN nn = Model.cnn5;
+    private NN nn = Model.cnn6;
     private Timeline updater;
 
     public static void main(String[] args) {
@@ -39,7 +39,7 @@ public class NumberClassifier extends Application {
         stage.sizeToScene();
         stage.show();
         initUpdater();
-        nn.loadInsideJar();
+        nn.load();
     }
 
     public StackPane createCanvas() {

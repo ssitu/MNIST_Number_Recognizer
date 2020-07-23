@@ -9,7 +9,7 @@ import numberclassifier.NNlib.NN;
 
 public class Train {
 
-    public static NN nn = Model.cnn5;
+    public static NN nn = Model.cnn6;
     public static MNIST mnist = new MNIST();
 
     public static void main(String[] args) throws IOException, FileNotFoundException, ClassNotFoundException {
