@@ -41,4 +41,8 @@ public class Model {
     );
     
     public static final NN nn = cnn4;
+    
+    static {
+        System.out.println("nn parameters: " + nn.getParameterCount());
+    }
 }
