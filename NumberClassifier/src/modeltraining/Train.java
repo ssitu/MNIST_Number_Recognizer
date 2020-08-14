@@ -14,8 +14,9 @@ public class Train {
 
     public static void main(String[] args) throws IOException, FileNotFoundException, ClassNotFoundException {
         nn.loadInsideJar();
+        System.out.println("Seed: " + nn.getSeed());
         NNlib.showInfo(NNlib.infoGraph(false), nn);
-        train(50);
+        train(3);
         System.exit(0);
     }
 
@@ -23,8 +24,26 @@ public class Train {
         System.out.println("Training started...");
         for (int epoch = 1; epoch <= epochs; epoch++) {
             test();
-            for (int i = 0; i < 60000; i++) {
-                nn.backpropagation(new float[][][]{mnist.trainingimages[i]}, mnist.traininglabels[i]);
+            int threadnum = 4;
+            int batchsize = 60000 / threadnum;
+            Thread[] threads = new Thread[threadnum];
+            for (int i = 0; i < threadnum; i++) {
+                int start = batchsize * i;
+                int end = batchsize * (i + 1);
+                Thread t = new Thread(() -> {
+                    for (int j = start; j < end; j++) {
+                        nn.backpropagation(new float[][][]{mnist.trainingimages[j]}, mnist.traininglabels[j]);
+//                        nn.feedforward(new float[][][]{mnist.trainingimages[i]});
+                    }
+                });
+                threads[i] = t;
+                t.run();
+            }
+            for (int i = 0; i < 4; i++) {
+                try {
+                    threads[i].join();
+                } catch (Exception e) {
+                }
             }
             nn.saveInsideJar();
             System.out.println("Epochs: " + epoch);
