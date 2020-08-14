@@ -3,8 +3,6 @@ package numberclassifier;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.*;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import javafx.animation.*;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -19,6 +17,19 @@ import javafx.util.Duration;
 
 public class NNlib extends Application {
 
+    /**
+     * A serializable version of java's Function interface
+     */
+    public interface Function<T, R> extends java.util.function.Function<T, R>, Serializable {
+    }
+
+    /**
+     * A serializable version of java's BiFunction interface
+     */
+    public interface BiFunction<T, S, R> extends java.util.function.BiFunction<T, S, R>, Serializable {
+    }
+
+    private static final long serial = 0;
     private static int threads;
     private static BiFunction<float[][], float[][], float[][]> dotProduct = (a, b) -> dot(a, b);
 
@@ -31,7 +42,7 @@ public class NNlib extends Application {
      */
     public static class NN implements Serializable {
 
-        private static final long serialVersionUID = 1;
+        private static final long serialVersionUID = serial;
         private Layer[] network;
         private float lr;
         private Random random = new Random();
@@ -454,7 +465,6 @@ public class NNlib extends Application {
      */
     public static abstract class Layer implements Serializable {
 
-        private static final long serialVersionUID = 1;
         private final boolean INFER;
         private int[] OUTSHAPE;
 
@@ -552,6 +562,7 @@ public class NNlib extends Application {
 
         public static class Dense extends Layer implements Serializable {
 
+            private static final long serialVersionUID = serial;
             private float[][] weights;
             private float[][] biases;
             private float[][] prevA;
@@ -653,18 +664,20 @@ public class NNlib extends Application {
 
             public void tuneParameters(float[][] gradientsW, float[][] gradientsB, boolean update) {
                 //Add to the accumulated gradients
-                if (accumulated[0] == null) {
-                    accumulated[0] = gradientsW;
-                    accumulated[1] = gradientsB;
-                } else {
-                    accumulated[0] = add(accumulated[0], gradientsW);
-                    accumulated[1] = add(accumulated[1], gradientsB);
-                }
-                if (update) {
-                    weights = subtract(weights, accumulated[0]);
-                    biases = subtract(biases, accumulated[1]);
-                    accumulated = new float[2][][];
-                }
+//                if (accumulated[0] == null) {
+//                    accumulated[0] = gradientsW;
+//                    accumulated[1] = gradientsB;
+//                } else {
+//                    accumulated[0] = add(accumulated[0], gradientsW);
+//                    accumulated[1] = add(accumulated[1], gradientsB);
+//                }
+//                if (update) {
+//                    weights = subtract(weights, accumulated[0]);
+//                    biases = subtract(biases, accumulated[1]);
+//                    accumulated = new float[2][][];
+//                }
+                weights = subtract(weights, gradientsW);
+                biases = subtract(biases, gradientsB);
             }
 
             /**
@@ -741,6 +754,7 @@ public class NNlib extends Application {
 
         public static class Conv extends Layer implements Serializable {
 
+            private static final long serialVersionUID = serial;
             private int inputHeight;
             private int inputWidth;
             private float[][][][] filters;
@@ -1006,6 +1020,7 @@ public class NNlib extends Application {
 
         public static class Flatten extends Layer implements Serializable {
 
+            private static final long serialVersionUID = serial;
             private int channels;
             private int height;
             private int width;
@@ -1129,6 +1144,7 @@ public class NNlib extends Application {
 
         public static class Maxpool extends Layer implements Serializable {
 
+            private static final long serialVersionUID = serial;
             private int inputChannels;
             private int inputHeight;
             private int inputWidth;

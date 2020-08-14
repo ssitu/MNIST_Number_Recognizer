@@ -24,20 +24,21 @@ public class Train {
         System.out.println("Training started...");
         for (int epoch = 1; epoch <= epochs; epoch++) {
             test();
-            int threadnum = 4;
+            int threadnum = 32;
             int batchsize = 60000 / threadnum;
             Thread[] threads = new Thread[threadnum];
             for (int i = 0; i < threadnum; i++) {
                 int start = batchsize * i;
                 int end = batchsize * (i + 1);
-                Thread t = new Thread(() -> {
+                threads[i] = new Thread(() -> {
                     for (int j = start; j < end; j++) {
                         nn.backpropagation(new float[][][]{mnist.trainingimages[j]}, mnist.traininglabels[j]);
 //                        nn.feedforward(new float[][][]{mnist.trainingimages[i]});
+//                        System.out.println(Thread.currentThread().getName() + " " + j);
                     }
                 });
-                threads[i] = t;
-                t.run();
+                threads[i].setName("t" + i);
+                threads[i].start();
             }
             for (int i = 0; i < 4; i++) {
                 try {
