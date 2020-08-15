@@ -1316,8 +1316,8 @@ public class NNlib extends Application {
             float[][] apply(float[][] parameters, int nodesIn);
         }
         public static final Initializer VANILLA = (a, b) -> a;//No change
-        public static final Initializer XAVIER = (a, b) -> scale(a, (float) Math.sqrt(6.0 / b));
-        public static final Initializer HE = (a, b) -> scale(a, (float) Math.sqrt(6.0 / b));
+        public static final Initializer XAVIER = (a, b) -> scale(a, (float) Math.sqrt(1.0 / b));
+        public static final Initializer HE = (a, b) -> scale(a, (float) Math.sqrt(2.0 / b));
     }
 
     /**
