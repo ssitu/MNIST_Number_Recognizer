@@ -24,7 +24,7 @@ public class Train {
         System.out.println("Training started...");
         for (int epoch = 1; epoch <= epochs; epoch++) {
             test();
-            int threadnum = 32;
+            int threadnum = 4;
             int batchsize = 60000 / threadnum;
             Thread[] threads = new Thread[threadnum];
             for (int i = 0; i < threadnum; i++) {

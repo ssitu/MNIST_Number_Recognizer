@@ -569,7 +569,8 @@ public class NNlib extends Application {
             private float[][] Z;
             private float[][][] updateStorageW;
             private float[][][] updateStorageB;
-            private float[][][] accumulated;//First element are for weights, second element are for biases
+            private float[][] accumulatedW;
+            private float[][] accumulatedB;
             private Activations.Activation activation;
             private Initializers.Initializer initializer;
             private int nodesIn;
@@ -600,7 +601,8 @@ public class NNlib extends Application {
                 weights = initializer.apply(weights, nodesIn);
                 updateStorageW = new float[1][nodesIn][nodesOut];
                 updateStorageB = new float[1][1][nodesOut];
-                accumulated = new float[2][][];
+                accumulatedW = new float[nodesIn][nodesOut];
+                accumulatedB = new float[1][nodesOut];
                 super.OUTSHAPE = new int[]{nodesOut};
             }
 
@@ -615,7 +617,8 @@ public class NNlib extends Application {
                 weights = initializer.apply(weights, nodesIn);
                 updateStorageW = new float[1][nodesIn][nodesOut];
                 updateStorageB = new float[1][1][nodesOut];
-                accumulated = new float[2][][];
+                accumulatedW = new float[nodesIn][nodesOut];
+                accumulatedB = new float[1][nodesOut];
                 super.OUTSHAPE = new int[]{nodesOut};
             }
 
@@ -664,20 +667,14 @@ public class NNlib extends Application {
 
             public void tuneParameters(float[][] gradientsW, float[][] gradientsB, boolean update) {
                 //Add to the accumulated gradients
-//                if (accumulated[0] == null) {
-//                    accumulated[0] = gradientsW;
-//                    accumulated[1] = gradientsB;
-//                } else {
-//                    accumulated[0] = add(accumulated[0], gradientsW);
-//                    accumulated[1] = add(accumulated[1], gradientsB);
-//                }
-//                if (update) {
-//                    weights = subtract(weights, accumulated[0]);
-//                    biases = subtract(biases, accumulated[1]);
-//                    accumulated = new float[2][][];
-//                }
-                weights = subtract(weights, gradientsW);
-                biases = subtract(biases, gradientsB);
+                accumulatedW = add(accumulatedW, gradientsW);
+                accumulatedB = add(accumulatedB, gradientsB);
+                if (update) {
+                    weights = subtract(weights, accumulatedW);
+                    biases = subtract(biases, accumulatedB);
+                    accumulatedW = new float[nodesIn][nodesOut];
+                    accumulatedB = new float[1][nodesOut];
+                }
             }
 
             /**
@@ -1319,8 +1316,8 @@ public class NNlib extends Application {
             float[][] apply(float[][] parameters, int nodesIn);
         }
         public static final Initializer VANILLA = (a, b) -> a;//No change
-        public static final Initializer XAVIER = (a, b) -> scale(a, (float) Math.sqrt(1.0 / b));
-        public static final Initializer HE = (a, b) -> scale(a, (float) Math.sqrt(2.0 / b));
+        public static final Initializer XAVIER = (a, b) -> scale(a, (float) Math.sqrt(6.0 / b));
+        public static final Initializer HE = (a, b) -> scale(a, (float) Math.sqrt(6.0 / b));
     }
 
     /**
